@@ -15,6 +15,10 @@ game.PlayerEntity = me.Entity.extend({
         this.body.setVelocity(5, 25);
         //this keeps track oof which direction your charecter is going
         this.facing = "right";
+        //checks what time it is
+        this.now = new Date().getTime();
+        this.lastHit = this.now;
+        this.lastAttack = new Date().getTime();
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
         //this adds the animations that i want for my charecter when he does a specific task
@@ -26,6 +30,7 @@ game.PlayerEntity = me.Entity.extend({
 
     },
     update: function(delta) {
+        this.now = new Date().getTime();
         if (me.input.isKeyPressed("right")) {
             //adds to the position of my x by the velocity defined above in
             //set velocity() and multiplying it by me.timer.tick.
@@ -98,6 +103,11 @@ game.PlayerEntity = me.Entity.extend({
                 this.body.vel.x = 0;
                 this.pos.x = this.pos.x + 1;
             }
+            
+            if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) {
+                this.lastHit = this.now;
+                response.b.loseHealth();
+            }
 
         }
     }
@@ -122,6 +132,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 
         this.type = "PlayerBaseEntity";
 
+//adds the animation
         this.renderable.addAnimation("idle", [0]);
         this.renderable.addAnimation("broken", [1]);
         this.renderable.setCurrentAnimation("idle");
@@ -177,6 +188,62 @@ game.EnemyBaseEntity = me.Entity.extend({
     },
     onCollision: function() {
 
+    },
+    
+    loseHealth: function () {
+        this.health --;
     }
 
+});
+
+game.EnemyCreep = me.Entity.extend({
+    init: function(x, y, settings){
+        this._super(me.Entity, 'init', [x, y, {
+                image: "creep1",
+                width: 32, 
+                height: 64,
+                spritewidth: "32",
+                spriteheight: "64",
+                getShape: function() {
+                    return (new me.Rect(0, 0, 32, 64)).toPolygon();
+                }
+        }]);
+    this.health = 10;
+    this.alwaysUpdate = true;
+    
+    this.body.setVelocity(3, 20);
+    
+    this.type = "EnemyCreep";
+    //adds the animation for my enemy creep to walk
+    this.renderable.addAnimation("walk", [3, 4, 5], 80);
+    //sets the animation to walk
+    this.renderable.setCurrentAnimation("walk");
+    },
+    
+    update: function() {
+        
+    }
+});
+
+game.GameManager = Object.extend({
+    init: function(x, y, settings) {
+        this.now = new Date().getTime();
+        //keeps track of the last time we made a creep happen
+        this.lastCreep = new Date().getTime();
+        
+        this.alwaysUpdate = true;
+    },
+    
+    update: function() {
+        //keeps track of the timer
+        this.now = new Date().getTime();
+        
+        if(Math.round(this.now/1000)%10 ===0 && (this.now - this.lastCreep >= 1000)) {
+            this.lastCreep = this.now;
+            var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
+            me.game.world.addChild(creepe, 5);
+        }
+        
+        return true;
+    }
 });
