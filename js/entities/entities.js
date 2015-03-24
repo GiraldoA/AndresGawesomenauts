@@ -103,8 +103,8 @@ game.PlayerEntity = me.Entity.extend({
                 this.body.vel.x = 0;
                 this.pos.x = this.pos.x + 1;
             }
-            
-            if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) {
+
+            if (this.renderable.isCurrentAnimation("attack") && this.now - this.lastHit >= 1000) {
                 this.lastHit = this.now;
                 response.b.loseHealth();
             }
@@ -129,8 +129,7 @@ game.PlayerBaseEntity = me.Entity.extend({
         this.health = 10;
         this.alwaysUpdate = true;
         this.body.onCollision = this.onCollision.bind(this);
-
-        this.type = "PlayerBaseEntity";
+        this.type = "PlayerBase";
 
 //adds the animation
         this.renderable.addAnimation("idle", [0]);
@@ -147,6 +146,11 @@ game.PlayerBaseEntity = me.Entity.extend({
         this._super(me.Entity, "update", [delta]);
         return true;
     },
+    
+    loseHealth: function(damage) {
+      this.health = this.health - damage;  
+    },
+    
     onCollision: function() {
 
     }
@@ -189,39 +193,65 @@ game.EnemyBaseEntity = me.Entity.extend({
     onCollision: function() {
 
     },
-    
-    loseHealth: function () {
-        this.health --;
+    loseHealth: function() {
+        this.health--;
     }
 
 });
 
 game.EnemyCreep = me.Entity.extend({
-    init: function(x, y, settings){
+    init: function(x, y, settings) {
         this._super(me.Entity, 'init', [x, y, {
                 image: "creep1",
-                width: 32, 
+                width: 32,
                 height: 64,
                 spritewidth: "32",
                 spriteheight: "64",
                 getShape: function() {
                     return (new me.Rect(0, 0, 32, 64)).toPolygon();
                 }
-        }]);
-    this.health = 10;
-    this.alwaysUpdate = true;
-    
-    this.body.setVelocity(3, 20);
-    
-    this.type = "EnemyCreep";
-    //adds the animation for my enemy creep to walk
-    this.renderable.addAnimation("walk", [3, 4, 5], 80);
-    //sets the animation to walk
-    this.renderable.setCurrentAnimation("walk");
+            }]);
+        this.health = 10;
+        this.alwaysUpdate = true;
+        //this.attacking lets us know if the enemy is currently attacking
+        this.attacking = false;
+        //keeps track of when our creep last attacked anything
+        this.lastAttacking = new Date().getTime();
+        //keep track of the last time our creep hit anything
+        this.lastHit = new Date().getTime();
+        this.now = new Date().getTime();
+        this.body.setVelocity(3, 30);
+
+        this.type = "EnemyCreep";
+        //adds the animation for my enemy creep to walk
+        this.renderable.addAnimation("walk", [3, 4, 5], 80);
+        //sets the animation to walk
+        this.renderable.setCurrentAnimation("walk");
     },
-    
-    update: function() {
-        
+    update: function(delta) {
+        this.now = new Date().getTime();
+
+        this.body.vel.x -= this.body.accel.x * me.timer.tick;
+
+        me.collision.check(this, true, this.collideHandler.bind(this), true);
+
+
+        this.body.update(delta);
+
+        this._super(me.Entity, "update", [delta]);
+
+        return true;
+    },
+    collideHandler: function(response) {
+        if (response.b.type === 'PlayerBase')
+            this.attacking = true;
+        // this.lastAttacking = this, now;
+        this.body.vel.x = 0;
+        this.pos.x = this.pos.x + 1;
+        if ((this.now - this.lastHit >= 1000)) {
+            this.lastHit = this.now;
+            response.b.loseHealth(1);
+        }
     }
 });
 
@@ -230,20 +260,19 @@ game.GameManager = Object.extend({
         this.now = new Date().getTime();
         //keeps track of the last time we made a creep happen
         this.lastCreep = new Date().getTime();
-        
+
         this.alwaysUpdate = true;
     },
-    
     update: function() {
         //keeps track of the timer
         this.now = new Date().getTime();
-        
-        if(Math.round(this.now/1000)%10 ===0 && (this.now - this.lastCreep >= 1000)) {
+
+        if (Math.round(this.now / 1000) % 10 === 0 && (this.now - this.lastCreep >= 1000)) {
             this.lastCreep = this.now;
             var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
             me.game.world.addChild(creepe, 5);
         }
-        
+
         return true;
     }
 });
