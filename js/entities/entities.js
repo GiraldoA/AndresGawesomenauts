@@ -21,6 +21,7 @@ game.PlayerEntity = me.Entity.extend({
         this.now = new Date().getTime();
         this.lastHit = this.now;
         this.dead = false;
+        this.attack = game.data.playerAttack;
         this.lastAttack = new Date().getTime();
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
@@ -35,7 +36,7 @@ game.PlayerEntity = me.Entity.extend({
     //every time the player dies he restarts at the top of the screen
     update: function(delta) {
         this.now = new Date().getTime();
-        if(this.health <= 0) {
+        if (this.health <= 0) {
             this.dead = true;
         }
         if (me.input.isKeyPressed("right")) {
@@ -109,36 +110,44 @@ game.PlayerEntity = me.Entity.extend({
                 //this.pos.x = this.pos.x - 1;
             } else if (xdif < 97 && this.facing === 'left' && xdif > 0) {
                 this.body.vel.x = 0;
-               // this.pos.x = this.pos.x + 1;
+                // this.pos.x = this.pos.x + 1;
             }
 
             if (this.renderable.isCurrentAnimation("attack") && ((this.now - this.lastHit) >= game.data.playerAttackTimer)) {
                 this.lastHit = this.now;
                 response.b.loseHealth(game.data.playerAttack);
             }
-        }else if(response.b.type==='EnemyCreep') {
+        } else if (response.b.type === 'EnemyCreep') {
             var xdif = this.pos.x - response.b.pos.x;
             var ydif = this.pos.y - response.b.pos.y;
-            
-            if(xdif>0) {
+
+            if (xdif > 0) {
                 //this.pos.x = this.pos.x + 1;
-                 if(this.facing=== "left") {
+                if (this.facing === "left") {
                     this.body.vel.x = 0;
                 }
-            }else {
-               // this.pos.x = this.pos.x - 1;
-                if(this.facing=== "right") {
+            } else {
+                // this.pos.x = this.pos.x - 1;
+                if (this.facing === "right") {
                     this.body.vel.x = 0;
                 }
             }
-            
-            if(this.renderable.isCurrentAnimation("attack") && (this.now - this.lastHit >= game.data.playerAttackTimer)
-                    && (Math.abs(ydif) <=40) && 
-                    (((xdif>0) && this.facing==="left") || ((xdif<0) && this.facing==="right"))
+
+            if (this.renderable.isCurrentAnimation("attack") && (this.now - this.lastHit >= game.data.playerAttackTimer)
+                    && (Math.abs(ydif) <= 40) &&
+                    (((xdif > 0) && this.facing === "left") || ((xdif < 0) && this.facing === "right"))
                     ) {
-                response.b.loseHealth(game.data.playerAttack);
+
                 //updates the timers
-            this.lastHit = this.now;
+                this.lastHit = this.now;
+                //if the creeps health is less than our attack, execute code in if statement
+                if (response.b.health <= game.data.playAttack) {
+                    //adds one gold for a creep kill
+                    game.data.gold += 1;
+                    console.log("current gold:" + game.data.gold);
+                }
+
+                response.b.loseHealth(game.data.playerAttack);
             }
         }
     }
@@ -257,19 +266,16 @@ game.EnemyCreep = me.Entity.extend({
         //sets the animation to walk
         this.renderable.setCurrentAnimation("walk");
     },
-    
     loseHealth: function(damage) {
-        console.log(this.health);
-      this.health = this.health - damage;  
+        this.health = this.health - damage;
     },
-    
     update: function(delta) {
-        
-        if(this.health <=0) {
+
+        if (this.health <= 0) {
             //when the creep dies it gets removed from the game world
             me.game.world.removeChild(this);
         }
-        
+
         this.now = new Date().getTime();
 
         this.body.vel.x -= this.body.accel.x * me.timer.tick;
@@ -329,18 +335,21 @@ game.GameManager = Object.extend({
         this.now = new Date().getTime();
         //keeps track of the last time we made a creep happen
         this.lastCreep = new Date().getTime();
-
+        this.paused = false;
         this.alwaysUpdate = true;
     },
     update: function() {
         //keeps track of the timer
         this.now = new Date().getTime();
         //if the player is dead then it removes the player and restarts him
-        if(game.data.player.dead) {
-        me.game.world.removeChild(game.data.player);
-        
-        
+        if (game.data.player.dead) {
+            me.game.world.removeChild(game.data.player);
             me.state.current().resetPlayer(10, 0);
+        }
+        
+         if (Math.round(this.now / 1000) %20 === 0 && (this.now - this.lastCreep >= 1000)) {
+             game.data.gold += 1;
+             console.log("current gold:" + game.data.gold);
         }
 
         if (Math.round(this.now / 1000) % 10 === 0 && (this.now - this.lastCreep >= 1000)) {
