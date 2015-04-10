@@ -1,4 +1,4 @@
-game.GameManager = Object.extend({
+game.GameTimerManager = Object.extend({
     init: function(x, y, settings) {
         this.now = new Date().getTime();
         //keeps track of the last time we made a creep happen
@@ -9,23 +9,64 @@ game.GameManager = Object.extend({
     update: function() {
         //keeps track of the timer
         this.now = new Date().getTime();
-        //if the player is dead then it removes the player and restarts him
-        if (game.data.player.dead) {
-            me.game.world.removeChild(game.data.player);
-            me.state.current().resetPlayer(10, 0);
-        }
-        
-         if (Math.round(this.now / 1000) %20 === 0 && (this.now - this.lastCreep >= 1000)) {
-             game.data.gold += 1;
-             console.log("current gold:" + game.data.gold);
-        }
+        this.goldTimerCheck();
+        this.creepTimerCheck();
 
+        return true;
+    },
+    goldTimerCheck: function() {
+        if (Math.round(this.now / 1000) % 20 === 0 && (this.now - this.lastCreep >= 1000)) {
+            game.data.gold += 1;
+            console.log("current gold:" + game.data.gold);
+        }
+    },
+    creepTimerCheck: function() {
         if (Math.round(this.now / 1000) % 10 === 0 && (this.now - this.lastCreep >= 1000)) {
             this.lastCreep = this.now;
             var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
             me.game.world.addChild(creepe, 5);
         }
+    }
+});
+
+game.HeroDeathManager = Object.extend({
+    init: function(x, y, settings) {
+        this.alwaysUpdate = true;
+    },
+    update: function() {
+        //i f the player is dead then it removes the player and restarts him
+        if (game.data.player.dead) {
+            me.game.world.removeChild(game.data.player);
+            me.state.current().resetPlayer(10, 0);
+        }
 
         return true;
+    }
+});
+
+game.ExperienceManager = Object.extend({
+    init: function(x, y, settings) {
+        this.alwaysUpdate = true;
+        this.gameOver = false;
+    },
+    update: function() {
+        //if the player wins the game he then gets 10 experience
+        if (game.data.win === true && !this.gameOver) {
+            this.gameOver(true);
+            //if the player losses the game he gets one experience
+        } else if (game.data.win === false && !this.gameOver) {
+        this.gameOver(false);
+        }
+        return true;
+    },  
+    gameOver: function(win) {
+        if(win) {
+             game.data.exp += 10; 
+        }else {
+             game.data.exp += 1;
+        }
+   
+        this.gameOver = true;
+        me.save.exp = game.data.exp;
     }
 });

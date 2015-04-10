@@ -168,10 +168,9 @@ game.PlayerEntity = me.Entity.extend({
         this.stopMovement(xdif);
 
         if (this.checkAttack(xdif, ydif)) {
-            this.hitChreep(response);
+            this.hitCreep(response);
         }
         ;
-
 
     },
     
