@@ -4,12 +4,13 @@ game.resources = [
 	 * @example
 	 * {name: "example", type:"image", src: "data/img/example.png"},
 	 */
-        {name: "background-tiles", type:"image", src: "data/img/background-tiles.png"},
-        {name: "meta-tiles", type:"image", src: "data/img/meta-tiles.png"},
+         {name: "background-tiles", type:"image", src: "data/img/background-tiles.png"},
+         {name: "meta-tiles", type:"image", src: "data/img/meta-tiles.png"},
          {name: "player", type:"image", src: "data/img/orcSpear.png"},
          {name: "tower", type:"image", src: "data/img/tower_round.svg.png"},    
          {name: "creep1", type:"image", src: "data/img/brainmonster.png"},
-             {name: "title-screen", type:"image", src: "data/img/title-screencustom.jpg"},
+         {name: "title-screen", type: "image", src: "data/img/title-screencustom.jpg"},
+         {name: "exp-screen", type:"image", src: "data/img/loadpic.png"},
         
 
 	/* Atlases 
