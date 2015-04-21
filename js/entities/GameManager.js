@@ -21,9 +21,9 @@ game.GameTimerManager = Object.extend({
         }
     },
     creepTimerCheck: function() {
-        if (Math.round(this.now / 1000) % 10 === 0 && (this.now - this.lastCreep >= 1000)) {
+        if (Math.round(this.now / 1000) % 10 === 0 && (this.now - this.lastCreep >= 1800)) {
             this.lastCreep = this.now;
-            var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
+            var creepe = me.pool.pull("EnemyCreep", 4800, 0, {});
             me.game.world.addChild(creepe, 5);
         }
     }
@@ -112,11 +112,43 @@ game.SpendGold = Object.extend({
         me.input.bindKey(me.input.KEY.F4, "F4", true);
         me.input.bindKey(me.input.KEY.F5, "F5", true);
         me.input.bindKey(me.input.KEY.F6, "F6", true);
+        this.setBuyText();
     },
+    
+    setBuyText: function() {
+      game.data.buytext = new (me.Renderable.extend({
+                    init: function() {
+                        this._super(me.Renderable, 'init', [game.data.pausePos.x, game.data.pausePos.y, 300, 50]);
+                        this.font = new me.Font("Arial", 26, "white");
+                        this.updateWhenPaused = true;
+                        this.alwaysUpdate = true;
+                    },
+                    //this draws all my options for upgrading and spending EXP  
+                    draw: function(renderer) {
+                        this.font.draw(renderer.getContext(), "Press F1-F6 to buy, B to EXIT. Current Gold: " + game.data.gold, this.pos.x, this.pos.y);
+                        this.font.draw(renderer.getContext(), "L", this.pos.x, this.pos.y + 40);
+                        this.font.draw(renderer.getContext(), "L", this.pos.x, this.pos.y + 80);
+                        this.font.draw(renderer.getContext(), "hi", this.pos.x, this.pos.y + 120);
+                        this.font.draw(renderer.getContext(), "I", this.pos.x, this.pos.y + 160);
+                        this.font.draw(renderer.getContext(), "I", this.pos.x, this.pos.y + 200);
+                        this.font.draw(renderer.getContext(), "I", this.pos.x, this.pos.y + 240);
+                    }
+                  
+                })); 
+                 me.game.world.addChild(game.data.buytext, 35);
+    },
+    
     stopBuying: function() {
         this.buying = false;
         me.state.resume(me.state.PLAY);
         game.data.player.body.setVelocity(game.data.playerMoveSpeed, 20);
         me.game.world.removeChild(game.data.buyscreen);
+        me.input.unbindKey(me.input.KEY.F1, "F1", true);
+        me.input.unbindKey(me.input.KEY.F2, "F2", true);
+        me.input.unbindKey(me.input.KEY.F3, "F3", true);
+        me.input.unbindKey(me.input.KEY.F4, "F4", true);
+        me.input.unbindKey(me.input.KEY.F5, "F5", true);
+        me.input.unbindKey(me.input.KEY.F6, "F6", true);
+        me.game.world.removeChild(game.data.buytext);
     }
 });

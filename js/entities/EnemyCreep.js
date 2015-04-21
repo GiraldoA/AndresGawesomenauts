@@ -7,7 +7,7 @@ game.EnemyCreep = me.Entity.extend({
                 spritewidth: "32",
                 spriteheight: "64",
                 getShape: function() {
-                    return (new me.Rect(0, 0, 1111, 64)).toPolygon();
+                    return (new me.Rect(0, 0, 32, 64)).toPolygon();
                 }
             }]);
         this.health = game.data.enemyCreepHealth;
