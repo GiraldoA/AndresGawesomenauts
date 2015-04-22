@@ -126,12 +126,12 @@ game.SpendGold = Object.extend({
                     //this draws all my options for upgrading and spending EXP  
                     draw: function(renderer) {
                         this.font.draw(renderer.getContext(), "Press F1-F6 to buy, B to EXIT. Current Gold: " + game.data.gold, this.pos.x, this.pos.y);
-                        this.font.draw(renderer.getContext(), "L", this.pos.x, this.pos.y + 40);
-                        this.font.draw(renderer.getContext(), "L", this.pos.x, this.pos.y + 80);
-                        this.font.draw(renderer.getContext(), "hi", this.pos.x, this.pos.y + 120);
-                        this.font.draw(renderer.getContext(), "I", this.pos.x, this.pos.y + 160);
-                        this.font.draw(renderer.getContext(), "I", this.pos.x, this.pos.y + 200);
-                        this.font.draw(renderer.getContext(), "I", this.pos.x, this.pos.y + 240);
+                        this.font.draw(renderer.getContext(), "Skill 1: Increase Damage. Current Level " + game.data.skill1 + " Cost: " +((game.data.skill1+1) *10), this.pos.x, this.pos.y + 40);
+                        this.font.draw(renderer.getContext(), "Skill 3: Run Faster! Current Level: " + game.data.skill2 + " Cost: " +((game.data.skill2+1) *10), this.pos.x, this.pos.y + 80);
+                        this.font.draw(renderer.getContext(), "Skill 4: Increase Health. Current Level: " + game.data.skill3 + " Cost: " +((game.data.skill3+1) *10), this.pos.x, this.pos.y + 120);
+                        this.font.draw(renderer.getContext(), "Q Ability: Speed Burst! Current Level: "  + game.data.ability1 + " Cost: " +((game.data.ability1+1) *10), this.pos.x, this.pos.y + 160);
+                        this.font.draw(renderer.getContext(), "W Ability: Creep Kills Grant Health Current Level: " + game.data.ability2 + " Cost: " +((game.data.ability2+1) *10), this.pos.x, this.pos.y + 200);
+                        this.font.draw(renderer.getContext(), "E Ability: Throw Your Spear Current Level:  " + game.data.ability3 + " Cost: " +((game.data.ability3+1) *10), this.pos.x, this.pos.y + 240);
                     }
                   
                 })); 
