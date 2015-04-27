@@ -5,12 +5,12 @@
         <group>
             <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/game.js</file>
             <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/entities/entities.js</file>
-            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/screens/title.js</file>
-            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/screens/spendExp.js</file>
+            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/index.php</file>
+            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/gamemanagers/GameManager.js</file>
             <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/resources.js</file>
-            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/entities/PlayerBaseEntity.js</file>
+            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/screens/loadProfile.js</file>
             <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/screens/play.js</file>
-            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/entities/GameManager.js</file>
+            <file>file:/C:/xampp/htdocs/AndresGawesomenauts/js/screens/newProfile.js</file>
         </group>
     </open-files>
 </project-private>

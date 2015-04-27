@@ -13,6 +13,8 @@ game.resources = [
          {name: "title-screen", type: "image", src: "data/img/title-screencustom.jpg"},
          {name: "exp-screen", type:"image", src: "data/img/magma.jpg"},
          {name: "gold-screen", type:"image", src: "data/img/magmamonster.jpg"},
+         {name: "load-screen", type:"image", src: "data/img/magmacrawler.jpg"},
+         {name: "new-screen", type:"image", src: "data/img/magmaspitter.jpg"},
          
         
 
