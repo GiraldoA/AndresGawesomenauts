@@ -133,11 +133,11 @@ require_once("php/controller/create-db.php");
                                 alert(response);
                             }else {
                                 var data = jQuery.parseJSON(response);
-                                game.data.exp = data["exp"];
-                                game.data.exp1 = data["exp1"];
-                                game.data.exp2 = data["exp2"];
-                                game.data.exp3 = data["exp3"];
-                                game.data.exp4 = data["exp4"];
+                                game.data.exp = Number(data["exp"]);
+                                game.data.exp1 = Number(data["exp1"]);
+                                game.data.exp2 = Number(data["exp2"]);
+                                game.data.exp3 = Number(data["exp3"]);
+                                game.data.exp4 = Number(data["exp4"]);
                                 me.state.change(me.state.SPENDEXP);
                             }
                         })
