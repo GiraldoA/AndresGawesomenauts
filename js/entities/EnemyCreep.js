@@ -2,10 +2,10 @@ game.EnemyCreep = me.Entity.extend({
     init: function(x, y, settings) {
         this._super(me.Entity, 'init', [x, y, {
                 image: "creep1",
-                width: 32,
-                height: 64,
-                spritewidth: "32",
-                spriteheight: "64",
+                width: 0,
+                height: 0,
+                spritewidth: "0",
+                spriteheight: "0",
                 getShape: function() {
                     return (new me.Rect(0, 0, 32, 64)).toPolygon();
                 }
@@ -23,9 +23,9 @@ game.EnemyCreep = me.Entity.extend({
 
         this.type = "EnemyCreep";
         //adds the animation for my enemy creep to walk
-        this.renderable.addAnimation("walk", [3, 4, 5], 80);
+       // this.renderable.addAnimation("walk", [3, 4, 5], 80);
         //sets the animation to walk
-        this.renderable.setCurrentAnimation("walk");
+       // Need later this.renderable.setCurrentAnimation("walk");
     },
     loseHealth: function(damage) {
         this.health = this.health - damage;
