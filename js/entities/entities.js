@@ -29,6 +29,7 @@ game.PlayerEntity = me.Entity.extend({
         //checks what time it is
         this.now = new Date().getTime();
         this.lastHit = this.now;
+        this.lastSpear = this.now;
         this.lastAttack = new Date().getTime();
     },
     
@@ -57,6 +58,7 @@ game.PlayerEntity = me.Entity.extend({
         this.now = new Date().getTime();
         this.dead = this.checkIfDead();
         this.checkIfKeyPressesAndMove();
+        this.checkAbilityKeys();
         this.setAnimation();
         me.collision.check(this, true, this.collideHandler.bind(this), true);
         this.body.update(delta);
@@ -109,6 +111,25 @@ game.PlayerEntity = me.Entity.extend({
 
     },
     
+    checkAbilityKeys: function() {
+      if(me.input.isKeyPressed("skill1")) {
+          //this.speedBurst();
+      }else if(me.input.isKeyPressed("skill2")){
+          //this.eatCreep();
+      }else if(me.input.isKeyPressed("skill3")) {
+          this.throwSpear();
+      }  
+    },
+    //allows my player to throw his spear at enemys
+    throwSpear: function() {
+        if(this.lastSpear >= game.data.spearTimer && game.data.ability3 > 0) {
+        this.lastSpear = this.now;
+            var spear = me.pool.pull("spear", this.pos.x, this.pos.y, {}, this.facing);
+            me.game.world.addChild(spear, 10);
+            
+        } 
+    },
+    
     setAnimation: function() {
         if (this.attacking) {
             if (!this.renderable.isCurrentAnimation("attack")) {
@@ -135,7 +156,7 @@ game.PlayerEntity = me.Entity.extend({
     
     collideHandler: function(response) {
 
-        if (response.b.type === 'EnemyBaseEntity') {
+        if (response.b.type === 'EnemyBaseEntity') {    
             this.collideWithEnemyBase(response);
         } else if (response.b.type === 'EnemyCreep') {
             this.collideWithEnemyCreep(response);

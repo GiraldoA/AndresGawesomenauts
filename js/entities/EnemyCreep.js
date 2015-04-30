@@ -1,32 +1,32 @@
 game.EnemyCreep = me.Entity.extend({
-    init: function(x, y, settings) {
-        this._super(me.Entity, 'init', [x, y, {
-                image: "creep1",
-                width: 0,
-                height: 0,
-                spritewidth: "0",
-                spriteheight: "0",
-                getShape: function() {
-                    return (new me.Rect(0, 0, 32, 64)).toPolygon();
-                }
-            }]);
-        this.health = game.data.enemyCreepHealth;
-        this.alwaysUpdate = true;
-        //this.attacking lets us know if the enemy is currently attacking
-        this.attacking = false;
-        //keeps track of when our creep last attacked anything
-        this.lastAttacking = new Date().getTime();
-        //keep track of the last time our creep hit anything
-        this.lastHit = new Date().getTime();
-        this.now = new Date().getTime();
-        this.body.setVelocity(3, 30);
+        init: function(x, y, settings) {
+            this._super(me.Entity, 'init', [x, y, {
+                    image: "creep1",
+                    width: 77,
+                    height: 88,
+                    spritewidth: "77",
+                    spriteheight: "88",
+                    getShape: function() {
+                        return (new me.Rect(0, 0, 77, 88)).toPolygon();
+                    }
+                }]);
+            this.health = game.data.enemyCreepHealth;
+            this.alwaysUpdate = true;
+            //this.attacking lets us know if the enemy is currently attacking
+            this.attacking = false;
+            //keeps track of when our creep last attacked anything
+            this.lastAttacking = new Date().getTime();
+            //keep track of the last time our creep hit anything
+            this.lastHit = new Date().getTime();
+            this.now = new Date().getTime();
+            this.body.setVelocity(3, 30);
 
-        this.type = "EnemyCreep";
-        //adds the animation for my enemy creep to walk
-       // this.renderable.addAnimation("walk", [3, 4, 5], 80);
-        //sets the animation to walk
-       // Need later this.renderable.setCurrentAnimation("walk");
-    },
+            this.type = "EnemyCreep";
+            //adds the animation for my enemy creep to walk
+           // this.renderable.addAnimation("walk", [3, 4, 5], 80);
+            //sets the animation to walk
+           // Need later this.renderable.setCurrentAnimation("walk");
+        },
     loseHealth: function(damage) {
         this.health = this.health - damage;
     },
