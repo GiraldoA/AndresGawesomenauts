@@ -95,9 +95,11 @@ require_once("php/controller/create-db.php");
         </script>
 
         <script>
+            //main menu button
             $("#mainmenu").bind("click", function() {
                 me.state.change(me.state.MENU);
             });
+            //register button
             $("#register").bind("click", function() {
                 $.ajax({
                     type: "POST",
@@ -108,6 +110,7 @@ require_once("php/controller/create-db.php");
                     },
                     dataType: "text"
                 })
+                //if sucessfully registered it takes you to me.state.PLAY
                         .success(function(response) {
                             if(response==="true") {
                                 me.state.change(me.state.PLAY);
@@ -119,6 +122,8 @@ require_once("php/controller/create-db.php");
                             alert("Fail");
                         });
             });
+            //load button
+            //loads the username created
             $("#load").bind("click", function() {
                 $.ajax({
                     type: "POST",
@@ -129,6 +134,7 @@ require_once("php/controller/create-db.php");
                     },
                     dataType: "text"
                 })
+                //if sucessfully loaded it will take you to me.state.SPENDEXP
                         .success(function(response) {
                             if(response==="Invalid username and password") {
                                 alert(response);
@@ -142,6 +148,7 @@ require_once("php/controller/create-db.php");
                                 me.state.change(me.state.SPENDEXP);
                             }
                         })
+                        //if login fails it will give you an alert telling you so
                         .fail(function(response) {
                             alert("Fail");
                         });

@@ -2,12 +2,12 @@ game.EnemyCreep = me.Entity.extend({
         init: function(x, y, settings) {
             this._super(me.Entity, 'init', [x, y, {
                     image: "creep1",
-                    width: 77,
-                    height: 88,
-                    spritewidth: "77",
-                    spriteheight: "88",
+                    width: 70,
+                    height: 70,
+                    spritewidth: "70",
+                    spriteheight: "70",
                     getShape: function() {
-                        return (new me.Rect(0, 0, 77, 88)).toPolygon();
+                        return (new me.Rect(0, 0, 70, 70)).toPolygon();
                     }
                 }]);
             this.health = game.data.enemyCreepHealth;

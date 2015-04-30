@@ -23,6 +23,7 @@ game.SpendGold = Object.extend({
 
         return true;
     },
+    //starts buying
     startBuying: function() {
         this.buying = true;
         me.state.pause(me.state.PLAY);
@@ -40,6 +41,7 @@ game.SpendGold = Object.extend({
         me.input.bindKey(me.input.KEY.F6, "F6", true);
         this.setBuyText();
     },
+    //sets the text for my buy screen
     setBuyText: function() {
         game.data.buytext = new (me.Renderable.extend({
             init: function() {
@@ -62,6 +64,7 @@ game.SpendGold = Object.extend({
         }));
         me.game.world.addChild(game.data.buytext, 35);
     },
+     // stops buying
     stopBuying: function() {
         this.buying = false;
         me.state.resume(me.state.PLAY);

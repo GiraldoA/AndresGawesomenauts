@@ -32,7 +32,7 @@ game.PlayerEntity = me.Entity.extend({
         this.lastSpear = this.now;
         this.lastAttack = new Date().getTime();
     },
-    
+    //sets the attributes of my player
     setAttributes: function() {
         this.health = game.data.playerHealth;
         this.body.setVelocity(game.data.playerMoveSpeed, 25);
@@ -66,13 +66,14 @@ game.PlayerEntity = me.Entity.extend({
         return true;
     },
     
+    //checks if my player is dead
     checkIfDead: function() {
         if (this.health <= 0) {
             return true;
         }
         return false;
     },
-    
+    //checks if a key is pressed to move
     checkIfKeyPressesAndMove: function() {
         if (me.input.isKeyPressed("right")) {
             this.moveRight();
@@ -89,7 +90,7 @@ game.PlayerEntity = me.Entity.extend({
 
         this.attacking = me.input.isKeyPressed("attack");
     },
-    
+    //if the right key is pressed he moves right
     moveRight: function() {
         //adds to the position of my x by the velocity defined above in
         //set velocity() and multiplying it by me.timer.tick.
@@ -98,19 +99,19 @@ game.PlayerEntity = me.Entity.extend({
         this.flipX(true);
         this.facing = "right";
     },
-    
+    //if the left key is pressed he moves left
     moveLeft: function() {
         this.facing = "left";
         this.body.vel.x -= this.body.accel.x * me.timer.tick;
         this.flipX(false);
     },
-    
+    //if the left key is pressed he moves left
     jump: function() {
         this.jumping = true;
         this.body.vel.y -= this.body.accel.y * me.timer.tick;
 
     },
-    
+    //checks the abilitys for my player to see which key is pressed
     checkAbilityKeys: function() {
       if(me.input.isKeyPressed("skill1")) {
           //this.speedBurst();
@@ -141,7 +142,9 @@ game.PlayerEntity = me.Entity.extend({
                 this.renderable.setAnimationFrame();
             }
         }
+        //if i am perfectly still then it sets the animation to idle
         else if (this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) {
+            //if the current animation is walk it sets the animation to walk
             if (!this.renderable.isCurrentAnimation("walk")) {
                 this.renderable.setCurrentAnimation("walk");
             }
@@ -149,11 +152,11 @@ game.PlayerEntity = me.Entity.extend({
             this.renderable.setCurrentAnimation("idle");
         }
     },
-    
+    //loses health
     loseHealth: function(damage) {
         this.health = this.health - damage;
     },
-    
+    //handles collisions with other entities
     collideHandler: function(response) {
 
         if (response.b.type === 'EnemyBaseEntity') {    
@@ -162,7 +165,7 @@ game.PlayerEntity = me.Entity.extend({
             this.collideWithEnemyCreep(response);
         }
     },
-    
+    //handles collisions with enemy base
     collideWithEnemyBase: function(response) {
         var ydif = this.pos.y - response.b.pos.y;
         var xdif = this.pos.x - response.b.pos.x;
@@ -218,7 +221,8 @@ game.PlayerEntity = me.Entity.extend({
         }
         return false;
     },
-    
+    //chekcs if my animation is attack
+    //if it is then it does damage
     hitCreep: function(response) {
         //if the creeps health is less than our attack, execute code in if statement
         if (response.b.health <= game.data.playAttack) {
